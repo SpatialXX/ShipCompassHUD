@@ -1,0 +1,86 @@
+ManifestFileVersion: 0
+CRC: 603019252
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c3d8807d525b7e5ba57e9e0c00a0bd36
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 166fe63485bcc461c1c692b524739f54
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/HUDMarkers/Models/ChevronModel.asset
+- Assets/HUDMarkers/Retrograde.prefab
+- Assets/HUDMarkers/Compass.prefab
+- Assets/HUDMarkers/RotationConsoleButton.prefab
+- Assets/HUDMarkers/Materials/BrightBlue.mat
+- Assets/HUDMarkers/Models/RadialInModel.asset
+- Assets/HUDMarkers/Normal.prefab
+- Assets/HUDMarkers/Maneuver.prefab
+- Assets/HUDMarkers/Models/ProgradeModel.asset
+- Assets/HUDMarkers/Models/CompassModel.asset
+- Assets/HUDMarkers/RadialIn.prefab
+- Assets/HUDMarkers/Materials/Ground.mat
+- Assets/HUDMarkers/Models/AntiNormalModel.asset
+- Assets/HUDMarkers/Models/HorizonModel.asset
+- Assets/HUDMarkers/Models/CompassCross.asset
+- Assets/HUDMarkers/Models/ArrowModel.asset
+- Assets/HUDMarkers/Materials/ConsoleMat.mat
+- Assets/HUDMarkers/Materials/BrightPurple.mat
+- Assets/HUDMarkers/Horizon.prefab
+- Assets/HUDMarkers/Prograde.prefab
+- Assets/HUDMarkers/Models/RetrogradeModel.asset
+- Assets/HUDMarkers/Materials/BrightYellow.mat
+- Assets/HUDMarkers/Models/PowerModel.asset
+- Assets/HUDMarkers/Materials/BrightRed.mat
+- Assets/HUDMarkers/AntiNormal.prefab
+- Assets/HUDMarkers/RadialOut.prefab
+- Assets/HUDMarkers/Models/NormalModel.asset
+- Assets/HUDMarkers/Materials/BlueScreen.mat
+- Assets/HUDMarkers/Models/RadialOutModel.asset
+- Assets/HUDMarkers/Materials/DarkBlue.mat
+- Assets/HUDMarkers/Models/ManeuverModel.asset
+- Assets/HUDMarkers/Models/HorizonMidModel.asset
+Dependencies: []

@@ -1,0 +1,33 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ow-mods/owml/master/schemas/config_schema.json",
+    "enabled": true,
+    "settings": {
+
+        "Markers Size": {
+            "type": "slider",
+            "min": 0,
+            "max": 1,
+            "value": 0.5,
+            "tooltip": "Set the size of the navigation markers in the ship"
+        },
+
+        "Auto Rotation Sensibility": {
+            "type": "slider",
+            "min": 0,
+            "max": 1,
+            "value": 0,
+            "tooltip": "How hard the ship will try to align to a selected rotation"
+        },
+
+        "Artificial Horizon": {
+            "type": "selector",
+            "value": "Separate Lines",
+            "options": [
+                "Separate Lines",
+                "Complete Line",
+                "Disabled"
+            ],
+            "tooltip": "The Artificial horizon is a line parallel to a planet horizon"
+        }
+    }
+}
