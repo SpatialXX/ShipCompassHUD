@@ -66,7 +66,7 @@ public class CompassInit : ModBehaviour
 
             Cockpit = GameObject.Find("/Ship_Body/Module_Cockpit");
 
-            ShipReferenceFrame = GameObject.Find("ShipScreenSpaceUI").transform.gameObject.GetComponent<ReferenceFrameGUI>();
+            ShipReferenceFrame = GameObject.Find("ShipScreenSpaceUI").transform.GetChild(0).gameObject.GetComponent<ReferenceFrameGUI>();
 
 
             this.gameObject.transform.parent = Cockpit.transform;
