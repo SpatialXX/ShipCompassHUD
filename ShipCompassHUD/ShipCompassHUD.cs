@@ -24,7 +24,7 @@ namespace ShipCompassHUD
 
         public void Start()
         {
-            ModHelper.Console.WriteLine($"Look upon my Works, ye Mighty, and despair! {nameof(ShipCompassHUD)} is loaded...", MessageType.Success);
+            ModHelper.Console.WriteLine($"Look upon my Works, ye Mighty, and despair! Flight Path Vectors is loaded...", MessageType.Success);
 
             new Harmony("SpatialX.ShipCompassHUD").PatchAll(Assembly.GetExecutingAssembly());
 
