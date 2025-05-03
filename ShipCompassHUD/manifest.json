@@ -4,7 +4,7 @@
   "author": "SpatialX",
   "name": "Flight Path Vector",
   "uniqueName": "SpatialX.ShipCompassHUD",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "owmlVersion": "2.14.0",
   "dependencies": []
 }
