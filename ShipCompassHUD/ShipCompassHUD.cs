@@ -78,15 +78,26 @@ namespace ShipCompassHUD
 
         public void ConfigureAlarmFirstStep()
         {
+            var ShowMark = ModHelper.Config.GetSettingsValue<bool>("Enable Flight Path Vectors HUD");
             var MarkSize = ModHelper.Config.GetSettingsValue<float>("Markers Size");
             var RotSensi = ModHelper.Config.GetSettingsValue<float>("Auto Rotation Sensibility");
             var HorizonKind = ModHelper.Config.GetSettingsValue<string>("Artificial Horizon");
+
+            var ShowAlt = ModHelper.Config.GetSettingsValue<bool>("Enable Rate of Closure HUD");
+            var ShowSpd = ModHelper.Config.GetSettingsValue<bool>("Enable Surface Speed HUD");
+            var ShowOrb = ModHelper.Config.GetSettingsValue<bool>("Enable True Speed HUD");
+            var ShowAcc = ModHelper.Config.GetSettingsValue<bool>("Enable Acceleration HUD");
+            var ShowOrbSpd = ModHelper.Config.GetSettingsValue<bool>("Enable Orbit Speed HUD");
+
+            var AccUnit = ModHelper.Config.GetSettingsValue<string>("Acceleration Units");
+            var ShowConsole = ModHelper.Config.GetSettingsValue<bool>("Enable Trajectory Console (broken)");
+            
 
             if (_CompassInit != null)
             {
                 if (_CompassInit.GetComponent<CompassInit>() != null)
                 {
-                    _CompassInit.GetComponent<CompassInit>().ConfigureInTwoStep(MarkSize, HorizonKind, RotSensi);
+                    _CompassInit.GetComponent<CompassInit>().ConfigureInTwoStep(ShowMark, MarkSize, HorizonKind, RotSensi, ShowAlt, ShowSpd, ShowOrb, ShowAcc, ShowOrbSpd, AccUnit, ShowConsole);
                 }
             }
         }

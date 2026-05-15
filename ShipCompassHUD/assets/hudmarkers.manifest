@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1608513666
+CRC: 1092496651
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a50bade2415bd61ecf004d2407448495
+    Hash: 91b416bc6694632479aa0abba661f2e4
   TypeTreeHash:
     serializedVersion: 2
-    Hash: ab6e8f86fc0b77232ab8f4617d51971c
+    Hash: ed735e7f8de1d0d78fe8328c8b3a718b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -41,6 +41,12 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 128
   Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
 - Class: 222
   Script: {instanceID: 0}
 - Class: 223
@@ -54,6 +60,7 @@ Assets:
 - Assets/HUDMarkers/Compass.prefab
 - Assets/HUDMarkers/RotationConsoleButton.prefab
 - Assets/HUDMarkers/Materials/BrightBlue.mat
+- Assets/HUDMarkers/Texture/SmokePuffNormal.tif
 - Assets/HUDMarkers/Models/RadialInModel.asset
 - Assets/HUDMarkers/Normal.prefab
 - Assets/HUDMarkers/Maneuver.prefab
@@ -64,6 +71,7 @@ Assets:
 - Assets/HUDMarkers/Models/AntiNormalModel.asset
 - Assets/HUDMarkers/Models/HorizonModel.asset
 - Assets/HUDMarkers/Models/CompassCross.asset
+- Assets/HUDMarkers/SmokeEffect.prefab
 - Assets/HUDMarkers/Models/ArrowModel.asset
 - Assets/HUDMarkers/Materials/ConsoleMat.mat
 - Assets/HUDMarkers/Materials/BrightPurple.mat
@@ -76,9 +84,12 @@ Assets:
 - Assets/HUDMarkers/AntiNormal.prefab
 - Assets/HUDMarkers/RadialOut.prefab
 - Assets/HUDMarkers/Models/NormalModel.asset
+- Assets/HUDMarkers/HorizontalSpeed.prefab
+- Assets/HUDMarkers/Texture/SmokePuff.png
 - Assets/HUDMarkers/Materials/BlueScreen.mat
 - Assets/HUDMarkers/Models/RadialOutModel.asset
 - Assets/HUDMarkers/Materials/DarkBlue.mat
 - Assets/HUDMarkers/Models/ManeuverModel.asset
+- Assets/HUDMarkers/Materials/Smoke.mat
 - Assets/HUDMarkers/Models/HorizonMidModel.asset
 Dependencies: []

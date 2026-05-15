@@ -2,7 +2,11 @@
     "$schema": "https://raw.githubusercontent.com/ow-mods/owml/master/schemas/config_schema.json",
     "enabled": true,
     "settings": {
-
+        "Enable Flight Path Vectors HUD": {
+            "type": "toggle",
+            "value": "true",
+            "tooltip": "Enables markers that indicate the flight path of the ship"
+        },
         "Markers Size": {
             "type": "slider",
             "min": 0,
@@ -28,6 +32,52 @@
                 "Disabled"
             ],
             "tooltip": "The Artificial horizon is a line parallel to a planet horizon"
+        },
+
+        "Enable Rate of Closure HUD": {
+            "type": "toggle",
+            "value": "true",
+            "tooltip": "Enables an indicator showing how quick your ship is approaching a target"
+        },
+
+        "Enable Surface Speed HUD": {
+            "type": "toggle",
+            "value": "true",
+            "tooltip": "Enables an indicator showing how fast your ship is going parallel to the surface of the target"
+        },
+
+        "Enable True Speed HUD": {
+            "type": "toggle",
+            "value": "false",
+            "tooltip": "Enables an indicator showing how fast your ship is travelling toward the prograde indicator"
+        },
+        "Enable Acceleration HUD": {
+            "type": "toggle",
+            "value": "false",
+            "tooltip": "Enables an indicator showing how much the ship acceleration changes"
+        },
+        "Enable Orbit Speed HUD": {
+            "type": "toggle",
+            "value": "true",
+            "tooltip": "Enables an indicator showing the required speed to orbit the target"
+        },
+
+        "Acceleration Units": {
+            "type": "selector",
+            "value": "Timber Hearth Gravity",
+            "options": [
+                "Timber Hearth Gravity",
+                "m/s",
+                "Earth Gravity",
+                "Disabled"
+            ],
+            "tooltip": "In which units to show the ship acceleration"
+        },
+
+        "Enable Trajectory Console (broken)": {
+            "type": "toggle",
+            "value": "false",
+            "tooltip": "Enables an (currently broken) console that would have allowed the ship to rotate to set directions"
         }
     }
 }
