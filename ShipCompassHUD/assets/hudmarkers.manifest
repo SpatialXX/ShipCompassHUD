@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1092496651
+CRC: 531839166
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 91b416bc6694632479aa0abba661f2e4
+    Hash: 8465dcb05ca9a83445aff3850ae33443
   TypeTreeHash:
     serializedVersion: 2
     Hash: ed735e7f8de1d0d78fe8328c8b3a718b
@@ -85,6 +85,7 @@ Assets:
 - Assets/HUDMarkers/RadialOut.prefab
 - Assets/HUDMarkers/Models/NormalModel.asset
 - Assets/HUDMarkers/HorizontalSpeed.prefab
+- Assets/HUDMarkers/Altimeter.prefab
 - Assets/HUDMarkers/Texture/SmokePuff.png
 - Assets/HUDMarkers/Materials/BlueScreen.mat
 - Assets/HUDMarkers/Models/RadialOutModel.asset

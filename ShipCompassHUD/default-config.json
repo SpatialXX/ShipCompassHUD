@@ -15,14 +15,6 @@
             "tooltip": "Set the size of the navigation markers in the ship"
         },
 
-        "Auto Rotation Sensibility": {
-            "type": "slider",
-            "min": 0,
-            "max": 1,
-            "value": 0,
-            "tooltip": "How hard the ship will try to align to a selected rotation"
-        },
-
         "Artificial Horizon": {
             "type": "selector",
             "value": "Separate Lines",
@@ -32,6 +24,24 @@
                 "Disabled"
             ],
             "tooltip": "The Artificial horizon is a line parallel to a planet horizon"
+        },
+
+        "Disable mod HUD on damage": {
+            "type": "toggle",
+            "value": "true",
+            "tooltip": "Allow the mod HUD to be disabled if the ship electrics or the autopilot are damaged"
+        },
+
+        "Enable Compass HUD": {
+            "type": "toggle",
+            "value": "true",
+            "tooltip": "Enables an interface showing the ship rotation in relation to the target north pole"
+        },
+
+        "Enable Altimeter HUD": {
+            "type": "toggle",
+            "value": "true",
+            "tooltip": "Enables an interface showing the ship altitude in relation to the surface of a target"
         },
 
         "Enable Rate of Closure HUD": {
@@ -72,6 +82,14 @@
                 "Disabled"
             ],
             "tooltip": "In which units to show the ship acceleration"
+        },
+
+        "Auto Rotation Sensibility (broken)": {
+            "type": "slider",
+            "min": 0,
+            "max": 1,
+            "value": 0,
+            "tooltip": "How hard the ship will try to align to a selected rotation"
         },
 
         "Enable Trajectory Console (broken)": {

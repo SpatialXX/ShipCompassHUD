@@ -23,18 +23,28 @@ namespace ShipCompassHUD.Components;
 public class CompassInit : ModBehaviour
 {
     public bool Initialized = false;
+    public bool CatastrophicInit = false;
     private GameObject CompassObject;
+    private bool CompassObjectGameRule;
     private List<Transform> NavBallMarkers = new List<Transform>();
     public List<float> MarkerDistance = new List<float>();
     private GameObject CompassDistance;
     public ReferenceFrameGUI ShipReferenceFrame;
     private GameObject Horizon;
+    private bool HorizonGameRule;
     private GameObject ManeuvreCompass;
     private GameObject Cockpit;
     private Text RotTxt;
     private GameObject MoveScreen;
     private float ShipAutoRotationSpeed;
-    //private GameObject MagneticCompass;
+
+
+    private GameObject MagneticCompass;
+    private bool MagneticCompassGameRule;
+    private Text MagneticCompassTxt;
+    private Transform VirtualNorth;
+    private Transform VirtualNeedle;
+    private Transform ShipNeedle;
 
     private List<int> WishedRotationX = new List<int>();
     private List<int> WishedRotationY = new List<int>();
@@ -55,6 +65,19 @@ public class CompassInit : ModBehaviour
     private int AccUnits;
     private List<bool> HUDEnabled = new List<bool>();
 
+    private GameObject HUDAltimeter;
+    private Transform HUDAltimeterShip;
+    private Transform HUDAltimeterGround;
+    private Transform HUDVanillaAltimeterShip;
+    private Transform HUDVanillaAltimeterGround;
+    private bool AltimeterGameRule;
+
+    private ShipComponent[] ShipDamaged;
+    private float TimeBetweenRdm;
+    private List<Vector3> RdmVect = new List<Vector3>();
+    private bool DisableOnDamageGameRule;
+
+
     public void Awake()
     {
         
@@ -66,7 +89,7 @@ public class CompassInit : ModBehaviour
 
     public void Update()
     {
-        if (Initialized == false)
+        if (Initialized == false && CatastrophicInit == false)
         {
             if (GameObject.Find("/Ship_Body/Module_Cockpit") == null)
             {
@@ -75,6 +98,7 @@ public class CompassInit : ModBehaviour
 
 
             Cockpit = GameObject.Find("/Ship_Body/Module_Cockpit");
+            CatastrophicInit = true;
 
             //MOAR COCKPITS
 
@@ -257,9 +281,32 @@ public class CompassInit : ModBehaviour
             MoveScreen = Button.transform.GetChild(10).gameObject;
 
 
-            //MagneticCompass = Instantiate(ShipCompassHUD.Instance.LoadAsset("Assets/HUDMarkers/Compass.prefab"), RotationSeter.transform);
-            //PlaceCorrectlyLocal(MagneticCompass.transform, new Vector3(0.92f, 0.05f, 0.2f), new Vector3(0, 35, 0), new Vector3(0.1f, 0.1f, 0.1f));
-            //MagneticCompass.name = "MagneticCompass";
+
+
+            MagneticCompass = Instantiate(ShipCompassHUD.Instance.LoadAsset("Assets/HUDMarkers/Compass.prefab"), RotationSeter.transform);
+            PlaceCorrectlyLocal(MagneticCompass.transform, new Vector3(0.92f, 0.05f, 0.2f), new Vector3(0, 35, 0), new Vector3(0.1f, 0.1f, 0.1f));
+            MagneticCompass.name = "MagneticCompass";
+            ShipNeedle = MagneticCompass.transform.GetChild(1);
+
+            GameObject VirtualCompass = new GameObject();
+            VirtualCompass.name = "VirtualNorth";
+            VirtualNorth = VirtualCompass.transform;
+            VirtualCompass = new GameObject();
+            VirtualCompass.name = "VirtualNeedle";
+            VirtualNeedle = VirtualCompass.transform;
+            VirtualNeedle.parent = VirtualNorth;
+            VirtualNeedle.localPosition = Vector3.zero;
+
+            Transform CompassTxt = MagneticCompass.transform.GetChild(0).GetChild(0);
+            CompassTxt.GetChild(0).GetComponent<Text>().font = txtRef.font;
+            MagneticCompassTxt = CompassTxt.GetChild(0).GetChild(0).GetComponent<Text>();
+            MagneticCompassTxt.font = txtRef.font;
+            CompassTxt.GetChild(1).GetComponent<Text>().font = txtRef.font;
+            CompassTxt.GetChild(2).GetComponent<Text>().font = txtRef.font;
+            CompassTxt.GetChild(3).GetComponent<Text>().font = txtRef.font;
+            
+
+
 
 
             PlaceCorrectlyLocal(RotationSeter.transform, new Vector3(0, 0.55f, 6.2f), Vector3.zero, new Vector3(1f, 1f, 1f));
@@ -278,6 +325,28 @@ public class CompassInit : ModBehaviour
 
             VelocityMemory.Add(0);
             VelocityMemory.Add(0);
+
+
+
+            GameObject AltimeterMesh = GameObject.Find("/Ship_Body/Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior/AltimeterShipPivot/AltimeterShip");
+            GameObject AltimeterGroundMesh = GameObject.Find("/Ship_Body/Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior/AltimeterFluidPivot/AltimeterFluid_Geo");
+
+            HUDAltimeter = Instantiate(ShipCompassHUD.Instance.LoadAsset("Assets/HUDMarkers/Altimeter.prefab"), RotationSeter.transform);
+            PlaceCorrectlyLocal(HUDAltimeter.transform, new Vector3(0.95f, 0.2f, 0), new Vector3(0, 90, 270), new Vector3(2f, 2f, 2f));
+
+            HUDAltimeterShip = HUDAltimeter.transform.GetChild(0).GetChild(0);
+            HUDAltimeterGround = HUDAltimeter.transform.GetChild(1).GetChild(0);
+            HUDVanillaAltimeterShip = AltimeterMesh.transform;
+            HUDVanillaAltimeterGround = AltimeterGroundMesh.transform;
+
+
+            HUDAltimeterShip.GetComponent<MeshFilter>().mesh = AltimeterMesh.GetComponent<MeshFilter>().mesh;
+            HUDAltimeterGround.GetComponent<MeshFilter>().mesh = AltimeterGroundMesh.GetComponent<MeshFilter>().mesh;
+            HUDAltimeter.transform.GetChild(2).GetComponent<MeshFilter>().mesh = AltimeterGroundMesh.GetComponent<MeshFilter>().mesh;
+
+
+
+            ShipDamaged = GameObject.Find("/Ship_Body/Module_Cockpit/Systems_Cockpit/ShipCockpitUI/DamageScreen/HUD_ShipDamageDisplay").GetComponent<ShipDamageDisplayV2>()._shipComponents;
 
 
 
@@ -315,28 +384,69 @@ public class CompassInit : ModBehaviour
             WishedRotationY.Add(0);
             WishedRotationY.Add(0);
 
+            RdmVect.Add(Vector3.zero);
+            RdmVect.Add(Vector3.zero);
+            RdmVect.Add(Vector3.zero);
+
             ShipCompassHUD.Instance.ConfigureAlarmFirstStep();
+
+            CatastrophicInit = false;
         }
 
-        else
+        else if (Initialized == true && CatastrophicInit == false)
         {
+
+            if (ShipDamaged[3]._damaged && DisableOnDamageGameRule)
+            {
+                CompassObject.SetActive(false);
+                MagneticCompass.SetActive(false);
+                HSpeedTxt.gameObject.SetActive(false);
+                HUDAltimeter.SetActive(false);
+                return;
+            }
+            else
+            {
+                CompassObject.SetActive(CompassObjectGameRule);
+                MagneticCompass.SetActive(MagneticCompassGameRule);
+                HSpeedTxt.gameObject.SetActive(true);
+                HUDAltimeter.SetActive(AltimeterGameRule);
+            }
+
+            Transform myObject = CompassObject.transform;
+            Vector3 relativeV = ShipBody.GetComponent<ShipBody>()._currentVelocity;
+            Vector3 upTarget = Vector3.zero;
+
+            if (ShipDamaged[0]._damaged && DisableOnDamageGameRule)
+            {
+                TimeBetweenRdm += Time.deltaTime;
+                if (TimeBetweenRdm > 1)
+                {
+                    TimeBetweenRdm = 0;
+                    RdmVect[0] = RdmVect[1];
+                    RdmVect[1] = new Vector3(Random.Range(-50.0f, 50.0f), Random.Range(-50.0f, 50.0f), Random.Range(-50.0f, 50.0f));
+                }
+                RdmVect[2] = Vector3.Lerp(RdmVect[0], RdmVect[1], TimeBetweenRdm);
+                relativeV = RdmVect[2];
+                upTarget = RdmVect[2];
+            }
 
             if (ShipReferenceFrame._currentReferenceFrame != null)
             {
 
-                Transform myObject = CompassObject.transform;
-                //Vector3 relativeV = ShipReferenceFrame._relativeVelocity;
-                Vector3 relativeV = ShipBody.GetComponent<ShipBody>()._currentVelocity - ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody._currentVelocity;
-                
-                Vector3 upTarget = ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody._lastPosition;
+                if (!ShipDamaged[0]._damaged || !DisableOnDamageGameRule)
+                {
+                    //Vector3 relativeV = ShipReferenceFrame._relativeVelocity;
+                    relativeV = ShipBody.GetComponent<ShipBody>()._currentVelocity - ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody._currentVelocity;
 
+                    upTarget = ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody._lastPosition;
+                }
+
+                
+                Horizon.SetActive(HorizonGameRule);
                 RotateUpObject(myObject, relativeV, upTarget);
-                //Horizon.transform.LookAt(upTarget);
-                //Horizon.transform.localEulerAngles = new Vector3(Horizon.transform.localEulerAngles.x, Horizon.transform.localEulerAngles.y, 0);
                 RotateUpObject(Horizon.transform, upTarget, Cockpit.transform.position);
 
-                //RotateUpObject(MagneticCompass.transform.GetChild(1), upTarget, upTarget);
-                //AlignCompassToPlanet(MagneticCompass.transform.GetChild(1), ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody.transform, Cockpit.transform);
+                NPoleCompass(Cockpit.transform, ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody.transform);
 
                 FakeShip.transform.position = Cockpit.transform.position;
                 FakeShip.transform.rotation = Cockpit.transform.rotation;
@@ -408,15 +518,38 @@ public class CompassInit : ModBehaviour
                     
                 }
 
-                //HSpeedTxt.text = ("" + (int)-Velocity.z + "m/s alt\n"+ (int)Mathf.Abs(Velocity.x) + "m/s spd\n" + (int)relativeV.magnitude + "m/s orb\n" + accString);
                 HSpeedTxt.text = FinalText;
-
 
             }
             else
             {
                 HSpeedTxt.text = ("NO DATA\nSELECT TARGET");
+                RotateUpObject(myObject, relativeV, upTarget);
+                Horizon.SetActive(false);
             }
+
+            if (ShipDamaged[0]._damaged && DisableOnDamageGameRule)
+            {
+                HSpeedTxt.text = HSpeedTxt.text + "\nERR:SENSORS_DMG";
+            }
+
+            if (AltimeterGameRule)
+            {
+                if (HUDVanillaAltimeterGround.localScale.x < 0.001f && HUDVanillaAltimeterShip.localPosition.x <= -0.389f)
+                {
+                    HUDAltimeter.SetActive(false);
+                }
+                else
+                {
+                    HUDAltimeter.SetActive(true);
+                    HUDAltimeterShip.localPosition = HUDVanillaAltimeterShip.localPosition;
+                    HUDAltimeterGround.localScale = HUDVanillaAltimeterGround.localScale;
+                }
+            }
+            
+            
+            
+
 
 
             int i = 0;
@@ -501,6 +634,12 @@ public class CompassInit : ModBehaviour
             }
 
         }
+
+        else
+        {
+            ShipCompassHUD.Instance.LogForStupids("FLIGHT PATH VECTOR INITIALIZATION FAILED\nDEACTIVATE THIS MOD IF YOU HAVE ISSUES");
+            this.gameObject.SetActive(false);
+        }
     }
 
     public void FixedUpdate()
@@ -546,15 +685,37 @@ public class CompassInit : ModBehaviour
         obj.rotation = newRotation;
     }
 
-    void AlignCompassToPlanet(Transform compass, Transform planet, Transform Player)
+    public void NPoleCompass(Transform p1, Transform Planet)
     {
-        Vector3 localNorthPole = planet.localPosition + (new Vector3(500 * planet.up.x, 500 * planet.up.y, 500 * planet.up.z));
-        Vector3 relativePos = localNorthPole - compass.position;
-        Quaternion rotation = Quaternion.LookRotation(relativePos, Player.up);
-        compass.rotation = rotation;
 
-        compass.localEulerAngles = new Vector3(0, 0, compass.localEulerAngles.y);
+        VirtualNorth.position = p1.position;
+        VirtualNorth.rotation = p1.rotation;
+
+        ParallelToBody(Planet, VirtualNorth, -Planet.up);
+
+        VirtualNeedle.rotation = p1.rotation;
+        ParallelToBody(Planet, VirtualNeedle, VirtualNeedle.forward);
+
+        float Angle = Vector3.Angle(-VirtualNeedle.right, VirtualNorth.right);
+        string StringAngle = "" + (int)Angle;
+        Vector3 cross = Vector3.Cross(-VirtualNeedle.right, VirtualNorth.right);
+        if (cross.y < 0)
+        {
+            Angle = -Angle;
+            StringAngle = "" + (360 + (int)Angle);
+        }
+
+        MagneticCompassTxt.text = StringAngle + "°";
+        ShipNeedle.localEulerAngles = new Vector3(0, 0, Angle);
     }
+
+    private void ParallelToBody(Transform body, Transform p1, Vector3 v)
+    {
+        Vector3 forward = (body.position - p1.position).normalized;
+        Vector3 right = Vector3.Cross(v, forward).normalized;
+        p1.rotation = Quaternion.LookRotation(forward, right);
+    }
+
 
     private string rotationText()
     {
@@ -834,29 +995,30 @@ public class CompassInit : ModBehaviour
     }
 
 
-    public void ConfigureInTwoStep(bool ShowMark, float MarkersSize, string HorizonKind, float RotationSensibility, bool ShowAlt, bool ShowSpd, bool  ShowOrb, bool ShowAcc, bool ShowOrbSpd, string AccUnit, bool ShowConsole)
+    public void ConfigureInTwoStep(bool ShowMark, float MarkersSize, string HorizonKind, float RotationSensibility, bool DisableOnDamage, bool ShowComp, bool ShowAltimeter, bool ShowAlt, bool ShowSpd, bool  ShowOrb, bool ShowAcc, bool ShowOrbSpd, string AccUnit, bool ShowConsole)
     {
         if (Initialized)
         {
 
             if (HorizonKind == "Separate Lines")
             {
-                Horizon.SetActive(true);
+                HorizonGameRule = true;
                 Horizon.transform.GetChild(0).gameObject.SetActive(true);
                 Horizon.transform.GetChild(1).gameObject.SetActive(true);
                 Horizon.transform.GetChild(2).gameObject.SetActive(false);
             }
             else if (HorizonKind == "Complete Line")
             {
-                Horizon.SetActive(true);
+                HorizonGameRule = true;
                 Horizon.transform.GetChild(0).gameObject.SetActive(false);
                 Horizon.transform.GetChild(1).gameObject.SetActive(false);
                 Horizon.transform.GetChild(2).gameObject.SetActive(true);
             }
             else
             {
-                Horizon.SetActive(false);
+                HorizonGameRule = false;
             }
+            Horizon.SetActive(HorizonGameRule);
 
             if (AccUnit == "Timber Hearth Gravity")
             {
@@ -885,6 +1047,14 @@ public class CompassInit : ModBehaviour
             LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(5));
             LazyMarkersResize(MarkersSize, ManeuvreCompass.transform.GetChild(0));
 
+
+            AltimeterGameRule = ShowAltimeter;
+            HUDAltimeter.SetActive(AltimeterGameRule);
+
+            MagneticCompassGameRule = ShowComp;
+            MagneticCompass.SetActive(ShowComp);
+
+
             HUDEnabled = new List<bool>();
             
             HUDEnabled.Add(ShowAlt);
@@ -893,10 +1063,13 @@ public class CompassInit : ModBehaviour
             HUDEnabled.Add(ShowAcc);
             HUDEnabled.Add(ShowOrbSpd);
 
+
             SystemOnOff(ShowMark);
+            CompassObjectGameRule = ShowMark;
             Button.SetActive(ShowConsole);
             ManeuvreCompass.SetActive(ShowConsole);
-            
+
+            DisableOnDamageGameRule = DisableOnDamage;
 
         }
     }

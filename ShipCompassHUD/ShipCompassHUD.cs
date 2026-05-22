@@ -80,9 +80,13 @@ namespace ShipCompassHUD
         {
             var ShowMark = ModHelper.Config.GetSettingsValue<bool>("Enable Flight Path Vectors HUD");
             var MarkSize = ModHelper.Config.GetSettingsValue<float>("Markers Size");
-            var RotSensi = ModHelper.Config.GetSettingsValue<float>("Auto Rotation Sensibility");
+            var RotSensi = ModHelper.Config.GetSettingsValue<float>("Auto Rotation Sensibility (broken)");
             var HorizonKind = ModHelper.Config.GetSettingsValue<string>("Artificial Horizon");
 
+            var DisableOnDamage = ModHelper.Config.GetSettingsValue<bool>("Disable mod HUD on damage");
+
+            var ShowComp = ModHelper.Config.GetSettingsValue<bool>("Enable Compass HUD");
+            var ShowAltimeter = ModHelper.Config.GetSettingsValue<bool>("Enable Altimeter HUD");
             var ShowAlt = ModHelper.Config.GetSettingsValue<bool>("Enable Rate of Closure HUD");
             var ShowSpd = ModHelper.Config.GetSettingsValue<bool>("Enable Surface Speed HUD");
             var ShowOrb = ModHelper.Config.GetSettingsValue<bool>("Enable True Speed HUD");
@@ -97,7 +101,7 @@ namespace ShipCompassHUD
             {
                 if (_CompassInit.GetComponent<CompassInit>() != null)
                 {
-                    _CompassInit.GetComponent<CompassInit>().ConfigureInTwoStep(ShowMark, MarkSize, HorizonKind, RotSensi, ShowAlt, ShowSpd, ShowOrb, ShowAcc, ShowOrbSpd, AccUnit, ShowConsole);
+                    _CompassInit.GetComponent<CompassInit>().ConfigureInTwoStep(ShowMark, MarkSize, HorizonKind, RotSensi, DisableOnDamage, ShowComp, ShowAltimeter, ShowAlt, ShowSpd, ShowOrb, ShowAcc, ShowOrbSpd, AccUnit, ShowConsole);
                 }
             }
         }
