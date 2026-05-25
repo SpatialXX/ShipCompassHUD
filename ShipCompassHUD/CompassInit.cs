@@ -349,6 +349,8 @@ public class CompassInit : ModBehaviour
             ShipDamaged = GameObject.Find("/Ship_Body/Module_Cockpit/Systems_Cockpit/ShipCockpitUI/DamageScreen/HUD_ShipDamageDisplay").GetComponent<ShipDamageDisplayV2>()._shipComponents;
 
 
+            GameObject NomaiCompass = Instantiate(CompassObject, GameObject.Find("/Comet_Body/Prefab_NOM_Shuttle/Shuttle_Body").transform);
+            PlaceCorrectlyLocal(NomaiCompass.transform, new Vector3(0, 23f, 0), new Vector3(0, 0, 0), new Vector3(5f, 5f, 5f));
 
 
             Initialized = true;
@@ -508,7 +510,12 @@ public class CompassInit : ModBehaviour
                             OrbitalSpeed = Mathf.Sqrt(Attractor._gravitationalMass * 0.001f);
                         }
 
-                        FinalText = FinalText + (int)OrbitalSpeed + "m/s orb";
+                        string txtBuilder = (int)OrbitalSpeed + "m/s orb\n";
+                        if ((int)OrbitalSpeed + 3 > (int)Velocity.x && (int)OrbitalSpeed - 3 < (int)Velocity.x)
+                        {
+                            txtBuilder = "<color=#CDFF38>" + txtBuilder + "</color>";
+                        }
+                        FinalText = FinalText + txtBuilder;
                     }
                     
                     else
@@ -517,6 +524,68 @@ public class CompassInit : ModBehaviour
                     }
                     
                 }
+
+                if (HUDEnabled[5] || HUDEnabled[6])
+                {
+                    if (ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody._attachedGravityVolume != null)
+                    {
+                        float R = Vector3.Distance(Cockpit.transform.position, upTarget);
+                        var Attractor = ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody._attachedGravityVolume;
+                        float mu = (Attractor._gravitationalMass * 0.001f);
+                        float V = relativeV.magnitude;
+                        float h = R * Mathf.Abs(Velocity.x);                                    //Moment cinétique spécifique
+                        float Apoapse = 0;
+                        float Periapse = 0;
+
+                        if (Attractor._falloffType == GravityVolume.FalloffType.inverseSquared)
+                        {
+
+                            float E = ((V * V) / 2) - (mu / R);                                     //Énergie orbitale spécifique
+                            float e = Mathf.Sqrt(1 + ((2 * (E * (h * h))) / (mu * mu)));             //Eccentricity
+
+                            Periapse = (h * h) / (mu * (1 + e));
+                            Apoapse = (h * h) / (mu * (1 - e));
+                            float SemiMajorAxis = (Periapse + Apoapse) / 2;
+
+
+                        }
+                        else
+                        {
+                            float E = (0.5f * (V * V)) + (mu * Mathf.Log(R));
+
+                            Periapse = SolveRadius(0.01f, R, h, mu, E);
+                            Apoapse = SolveRadius(R, R * 100f, h, mu, E);
+
+                        }
+                        string txtBuilder = "";
+
+                        if (HUDEnabled[5])
+                        {
+                            txtBuilder = (int)Apoapse + "m ap\n";
+
+                            if (R + 10 > Apoapse && R - 10 < Apoapse)
+                            {
+                                txtBuilder = "<color=#CDFF38>" + txtBuilder + "</color>";
+                            }
+
+                            FinalText = FinalText + txtBuilder;
+                        }
+
+                        if (HUDEnabled[6])
+                        {
+                            txtBuilder = (int)Periapse + "m pe\n";
+
+                            if (R + 10 > Periapse && R - 10 < Periapse)
+                            {
+                                txtBuilder = "<color=#CDFF38>" + txtBuilder + "</color>";
+                            }
+
+                            FinalText = FinalText + txtBuilder;
+                        }
+
+                    }
+                }
+
 
                 HSpeedTxt.text = FinalText;
 
@@ -995,7 +1064,7 @@ public class CompassInit : ModBehaviour
     }
 
 
-    public void ConfigureInTwoStep(bool ShowMark, float MarkersSize, string HorizonKind, float RotationSensibility, bool DisableOnDamage, bool ShowComp, bool ShowAltimeter, bool ShowAlt, bool ShowSpd, bool  ShowOrb, bool ShowAcc, bool ShowOrbSpd, string AccUnit, bool ShowConsole)
+    public void ConfigureInTwoStep(bool ShowMark, float MarkersSize, string HorizonKind, float RotationSensibility, bool DisableOnDamage, bool ShowComp, bool ShowAltimeter, bool ShowAlt, bool ShowSpd, bool  ShowOrb, bool ShowAcc, bool ShowOrbSpd, bool ShowAP, bool ShowEP, string AccUnit, bool ShowConsole)
     {
         if (Initialized)
         {
@@ -1062,6 +1131,8 @@ public class CompassInit : ModBehaviour
             HUDEnabled.Add(ShowOrb);
             HUDEnabled.Add(ShowAcc);
             HUDEnabled.Add(ShowOrbSpd);
+            HUDEnabled.Add(ShowAP);
+            HUDEnabled.Add(ShowEP);
 
 
             SystemOnOff(ShowMark);
@@ -1093,6 +1164,27 @@ public class CompassInit : ModBehaviour
         return new Vector3(Parallel, 0, Closing);
     }
 
+    float OrbitEquation(float r, float h, float mu, float E)
+    {
+        return ( (h * h) / (2f * (r * r)) ) + ((mu * Mathf.Log(r)) - E);
+    }
 
+    float SolveRadius( float r1, float r2, float h, float mu, float E)
+    {
+        for (int i = 0; i < 64; i++)
+        {
+            float mid = (r1 + r2) * 0.5f;
+
+            float f1 = OrbitEquation(r1, h, mu, E);
+            float fm = OrbitEquation(mid, h, mu, E);
+
+            if (Mathf.Sign(f1) == Mathf.Sign(fm))
+                r1 = mid;
+            else
+                r2 = mid;
+        }
+
+        return (r1 + r2) * 0.5f;
+    }
 }
 

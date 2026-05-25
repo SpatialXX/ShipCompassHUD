@@ -93,6 +93,9 @@ namespace ShipCompassHUD
             var ShowAcc = ModHelper.Config.GetSettingsValue<bool>("Enable Acceleration HUD");
             var ShowOrbSpd = ModHelper.Config.GetSettingsValue<bool>("Enable Orbit Speed HUD");
 
+            var ShowAP = ModHelper.Config.GetSettingsValue<bool>("Enable Apoapsis HUD");
+            var ShowPE = ModHelper.Config.GetSettingsValue<bool>("Enable Periapsis HUD");
+
             var AccUnit = ModHelper.Config.GetSettingsValue<string>("Acceleration Units");
             var ShowConsole = ModHelper.Config.GetSettingsValue<bool>("Enable Trajectory Console (broken)");
             
@@ -101,7 +104,7 @@ namespace ShipCompassHUD
             {
                 if (_CompassInit.GetComponent<CompassInit>() != null)
                 {
-                    _CompassInit.GetComponent<CompassInit>().ConfigureInTwoStep(ShowMark, MarkSize, HorizonKind, RotSensi, DisableOnDamage, ShowComp, ShowAltimeter, ShowAlt, ShowSpd, ShowOrb, ShowAcc, ShowOrbSpd, AccUnit, ShowConsole);
+                    _CompassInit.GetComponent<CompassInit>().ConfigureInTwoStep(ShowMark, MarkSize, HorizonKind, RotSensi, DisableOnDamage, ShowComp, ShowAltimeter, ShowAlt, ShowSpd, ShowOrb, ShowAcc, ShowOrbSpd, ShowAP, ShowPE, AccUnit, ShowConsole);
                 }
             }
         }

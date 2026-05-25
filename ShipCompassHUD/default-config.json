@@ -72,6 +72,18 @@
             "tooltip": "Enables an indicator showing the required speed to orbit the target"
         },
 
+        "Enable Apoapsis HUD": {
+            "type": "toggle",
+            "value": "true",
+            "tooltip": "Enables an indicator showing the farthest distance your ship will be from the target before falling back"
+        },
+
+        "Enable Periapsis HUD": {
+            "type": "toggle",
+            "value": "true",
+            "tooltip": "Enables an indicator showing the closest distance your ship will be from the target before climbing up"
+        },
+
         "Acceleration Units": {
             "type": "selector",
             "value": "Timber Hearth Gravity",
