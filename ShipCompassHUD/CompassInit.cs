@@ -349,8 +349,8 @@ public class CompassInit : ModBehaviour
             ShipDamaged = GameObject.Find("/Ship_Body/Module_Cockpit/Systems_Cockpit/ShipCockpitUI/DamageScreen/HUD_ShipDamageDisplay").GetComponent<ShipDamageDisplayV2>()._shipComponents;
 
 
-            GameObject NomaiCompass = Instantiate(CompassObject, GameObject.Find("/Comet_Body/Prefab_NOM_Shuttle/Shuttle_Body").transform);
-            PlaceCorrectlyLocal(NomaiCompass.transform, new Vector3(0, 23f, 0), new Vector3(0, 0, 0), new Vector3(5f, 5f, 5f));
+            //GameObject NomaiCompass = Instantiate(CompassObject, GameObject.Find("/Comet_Body/Prefab_NOM_Shuttle/Shuttle_Body").transform);
+            //PlaceCorrectlyLocal(NomaiCompass.transform, new Vector3(0, 23f, 0), new Vector3(0, 0, 0), new Vector3(5f, 5f, 5f));
 
 
             Initialized = true;
@@ -472,7 +472,7 @@ public class CompassInit : ModBehaviour
                 if (HUDEnabled[3])
                 {
                     float acc = ((VelocityMemory[0] - VelocityMemory[1]) / 0.1f);
-                    string accString = "m/s G";
+                    string accString = "m/s^2";
 
                     if (AccUnits == 0)
                     {
@@ -481,7 +481,7 @@ public class CompassInit : ModBehaviour
                     }
                     else if (AccUnits == 1)
                     {
-                        accString = (int)acc + "m/s  G";
+                        accString = (int)acc + "m/s^2";
                     }
                     else if (AccUnits == 2)
                     {
@@ -1093,7 +1093,7 @@ public class CompassInit : ModBehaviour
             {
                 AccUnits = 0;
             }
-            else if (AccUnit == "m/s")
+            else if (AccUnit == "m/s^2")
             {
                 AccUnits = 1;
             }

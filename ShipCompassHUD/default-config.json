@@ -89,7 +89,7 @@
             "value": "Timber Hearth Gravity",
             "options": [
                 "Timber Hearth Gravity",
-                "m/s",
+                "m/s^2",
                 "Earth Gravity",
                 "Disabled"
             ],
