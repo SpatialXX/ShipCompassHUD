@@ -77,6 +77,8 @@ public class CompassInit : ModBehaviour
     private List<Vector3> RdmVect = new List<Vector3>();
     private bool DisableOnDamageGameRule;
 
+    private Transform TargetCompass;
+
 
     public void Awake()
     {
@@ -132,7 +134,8 @@ public class CompassInit : ModBehaviour
             //FELDSPAR SHIP
 
             ShipReferenceFrame = GameObject.Find("ShipScreenSpaceUI").transform.GetChild(0).gameObject.GetComponent<ReferenceFrameGUI>();
-
+            //PlayerHUD/HelmetOffUI/HelmetOffLockOn/LockOnGUI  .GetComponent<ReferenceFrameGUI>()
+            //Player_Body
 
             this.gameObject.transform.parent = Cockpit.transform;
             PlaceCorrectlyLocal(this.gameObject.transform, new Vector3(0, 1.2f, 4.5f), Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f));
@@ -206,14 +209,37 @@ public class CompassInit : ModBehaviour
             PlaceCorrectlyLocal(Maneuvre.transform, new Vector3(0, 0, 0.5f), new Vector3(0, 0, 0), new Vector3(0.005f, 0.005f, 0.005f));
             Maneuvre.name = "Maneuvre";
 
+
             Horizon = Instantiate(ShipCompassHUD.Instance.LoadAsset("Assets/HUDMarkers/Horizon.prefab"), CompassObject.transform);
             Horizon.transform.parent = CompassObject.transform;
             PlaceCorrectlyLocal(Horizon.transform, new Vector3(0, 0f, 0), new Vector3(0, 0, 0), new Vector3(0.45f, 0.45f, 0.45f));
             Horizon.name = "Horizon";
 
 
+            GameObject TargetCompassGM = new GameObject("TargetCompass");
+            TargetCompassGM.transform.parent = CompassObject.transform;
+            PlaceCorrectlyLocal(TargetCompassGM.transform, new Vector3(0, 0f, 0), new Vector3(0, 0, 0), new Vector3(1, 1, 1));
+            TargetCompass = TargetCompassGM.transform;
+
+            GameObject TargetIn = Instantiate(ShipCompassHUD.Instance.LoadAsset("Assets/HUDMarkers/TargetPrograde.prefab"), TargetCompassGM.transform);
+            PlaceCorrectlyLocal(TargetIn.transform, new Vector3(0, 0, 0.5f), new Vector3(0, 0, 0), new Vector3(0.005f, 0.005f, 0.005f));
+            TargetIn.name = "TargetPrograde";
+
+            GameObject TargetOut = Instantiate(ShipCompassHUD.Instance.LoadAsset("Assets/HUDMarkers/TargetRetrograde.prefab"), TargetCompassGM.transform);
+            PlaceCorrectlyLocal(TargetOut.transform, new Vector3(0, 0f, -0.5f), new Vector3(0, 0, 0), new Vector3(0.005f, 0.005f, 0.005f));
+            TargetOut.name = "TargetRetrograde";
+
+            GameObject DiagonalMotion = Instantiate(ShipCompassHUD.Instance.LoadAsset("Assets/HUDMarkers/BestVector.prefab"), TargetCompassGM.transform);
+            PlaceCorrectlyLocal(DiagonalMotion.transform, new Vector3(0, 1, 1).normalized * 0.5f, new Vector3(0, 0.45f, 0), new Vector3(0.05f, 0.05f, 0.05f));
+            //DiagonalMotion.transform.parent = Cockpit.transform;
+            DiagonalMotion.name = "DiagonalVector";
+
+
 
             PlaceCorrectlyLocal(CompassObject.transform, new Vector3(0,1.2f, 4.5f), Vector3.zero, new Vector3(4.1f, 4.1f, 4.1f));
+
+            TargetCompass.parent = Cockpit.transform;
+            DiagonalMotion.transform.parent = Cockpit.transform;
 
             ManeuvreCompass.transform.parent = Cockpit.transform;
 
@@ -351,6 +377,27 @@ public class CompassInit : ModBehaviour
 
             //GameObject NomaiCompass = Instantiate(CompassObject, GameObject.Find("/Comet_Body/Prefab_NOM_Shuttle/Shuttle_Body").transform);
             //PlaceCorrectlyLocal(NomaiCompass.transform, new Vector3(0, 23f, 0), new Vector3(0, 0, 0), new Vector3(5f, 5f, 5f));
+            
+            //GameObject NomaiProbe= Instantiate(CompassObject, GameObject.Find("/NomaiProbe_Body").transform);
+            //GiantsDeep_Body/Sector_GD/Sector_GDInterior/Sector_GDCore/Sector_Module_Sunken/Interactables_Module_Sunken/HologramProjector/Hologram_LatestProbeTrajectory(Clone)/ScaleRoot/GiantsDeepRoot/giantsDeep
+            //GiantsDeep_Body/Sector_GD/Sector_GDInterior/Sector_GDCore/Sector_Module_Sunken/Interactables_Module_Sunken/HologramProjector/Hologram_LatestProbeTrajectory(Clone)/ScaleRoot/GiantsDeepRoot/Effects_NOM_OrbitHologram_Large
+            //GiantsDeep_Body/Sector_GD/Sector_GDInterior/Sector_GDCore/Sector_Module_Sunken/Interactables_Module_Sunken/HologramProjector/Hologram_LatestProbeTrajectory(Clone)/ScaleRoot/Hologram_NomaiProbe(Clone)
+
+            GameObject PlayerCanvas = Instantiate(CompassObject, GameObject.Find("/PlayerHUD/HelmetOnUI/UICanvas").transform);
+            PlaceCorrectlyLocal(PlayerCanvas.transform, new Vector3(0, 0, -500), new Vector3(0, 0, 0), new Vector3(1000f, 1000f, 1000f));
+            Component[] PCC = PlayerCanvas.transform.GetComponentsInChildren<Transform>();
+
+            foreach (Transform ChildT in PCC)
+            {
+                ChildT.gameObject.layer = GameObject.Find("/PlayerHUD/HelmetOnUI/UICanvas").layer;
+                ChildT.gameObject.AddComponent<CanvasRenderer>();
+            }
+
+            var PlayerCompass = PlayerCanvas.AddComponent<CompassObjectBehaviour>();
+            PlayerCompass.RF = GameObject.Find("/PlayerHUD/HelmetOffUI/HelmetOffLockOn/LockOnGUI").GetComponent<ReferenceFrameGUI>();
+            PlayerCompass.RB = GameObject.Find("/Player_Body").GetComponent<OWRigidbody>();
+
+
 
 
             Initialized = true;
@@ -365,7 +412,13 @@ public class CompassInit : ModBehaviour
             NavBallMarkers.Add(RadialIn.transform);
             NavBallMarkers.Add(RadialOut.transform);
             NavBallMarkers.Add(Maneuvre.transform);
+            NavBallMarkers.Add(TargetIn.transform);
+            NavBallMarkers.Add(TargetOut.transform);
+            NavBallMarkers.Add(DiagonalMotion.transform);
 
+            MarkerDistance.Add(0);
+            MarkerDistance.Add(0);
+            MarkerDistance.Add(0);
             MarkerDistance.Add(0);
             MarkerDistance.Add(0);
             MarkerDistance.Add(0);
@@ -437,9 +490,7 @@ public class CompassInit : ModBehaviour
 
                 if (!ShipDamaged[0]._damaged || !DisableOnDamageGameRule)
                 {
-                    //Vector3 relativeV = ShipReferenceFrame._relativeVelocity;
                     relativeV = ShipBody.GetComponent<ShipBody>()._currentVelocity - ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody._currentVelocity;
-
                     upTarget = ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody._lastPosition;
                 }
 
@@ -561,7 +612,24 @@ public class CompassInit : ModBehaviour
 
                         if (HUDEnabled[5])
                         {
-                            txtBuilder = (int)Apoapse + "m ap\n";
+                            txtBuilder = (int)Apoapse + "m";
+
+                            if (Apoapse < 0)
+                            {
+                                Apoapse = R;
+                            }
+                            if (Apoapse > 100000)
+                            {
+                                txtBuilder = "ESCAPED";
+                            }
+                            else if (Apoapse > 10000)
+                            {
+                                Apoapse = Apoapse / 1000;
+                                txtBuilder = (int)Apoapse + "km";
+                            }
+                            
+                            
+                                txtBuilder = txtBuilder + " ap\n";
 
                             if (R + 10 > Apoapse && R - 10 < Apoapse)
                             {
@@ -573,7 +641,20 @@ public class CompassInit : ModBehaviour
 
                         if (HUDEnabled[6])
                         {
-                            txtBuilder = (int)Periapse + "m pe\n";
+                            txtBuilder = (int)Periapse + "m";
+
+                            if (Periapse > 100000)
+                            {
+                                txtBuilder = "ESCAPED";
+                            }
+                            else if (Periapse > 10000)
+                            {
+                                Periapse = Periapse / 1000;
+                                txtBuilder = (int)Periapse + "km";
+                            }
+                            
+
+                            txtBuilder = txtBuilder + " pe\n";
 
                             if (R + 10 > Periapse && R - 10 < Periapse)
                             {
@@ -586,6 +667,16 @@ public class CompassInit : ModBehaviour
                     }
                 }
 
+                Vector3 ParallelDirection = -(relativeV - ((upTarget - Cockpit.transform.position).normalized * Velocity.z));
+                float balance = 200;
+                if (Velocity.x > 100)
+                {
+                    balance = Velocity.x * 2;
+                }
+                ParallelDirection = ParallelDirection + ((upTarget - Cockpit.transform.position).normalized * balance);
+                TargetCompass.LookAt(TargetCompass.transform.position + (ParallelDirection.normalized * 100f));
+
+                
 
                 HSpeedTxt.text = FinalText;
 
@@ -717,12 +808,15 @@ public class CompassInit : ModBehaviour
         {
             if (HUDEnabled[3])
             {
-                longerTimer += Time.fixedDeltaTime;
-                if (longerTimer >= 0.1f)
+                if (ShipReferenceFrame._currentReferenceFrame != null)
                 {
-                    longerTimer = 0;
-                    VelocityMemory[1] = VelocityMemory[0];
-                    VelocityMemory[0] = (ShipBody.GetComponent<ShipBody>()._currentVelocity - ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody._currentVelocity).magnitude;
+                    longerTimer += Time.fixedDeltaTime;
+                    if (longerTimer >= 0.1f)
+                    {
+                        longerTimer = 0;
+                        VelocityMemory[1] = VelocityMemory[0];
+                        VelocityMemory[0] = (ShipBody.GetComponent<ShipBody>()._currentVelocity - ShipReferenceFrame._currentReferenceFrame._attachedOWRigidbody._currentVelocity).magnitude;
+                    }
                 }
             }
         }
@@ -738,20 +832,16 @@ public class CompassInit : ModBehaviour
     }
 
 
-    public void RotateUpObject(Transform obj, Vector3 targetPosition, Vector3 upReference)
+    public void RotateUpObject(Transform ToRotate, Vector3 targetPosition, Vector3 upReference)
     {
-        // Step 1: Rotate to face the target position
-        obj.LookAt(targetPosition);
+        ToRotate.LookAt(targetPosition);
 
-        // Step 2: Align Up Vector toward the second reference position
-        Vector3 forward = obj.forward; // Current forward vector (already looking at target)
-        Vector3 upDirection = (upReference - obj.position).normalized; // Direction to align up
+        Vector3 forward = ToRotate.forward; 
+        Vector3 up = (upReference - ToRotate.position).normalized;
 
-        // Create a new rotation that maintains forward but adjusts up direction
-        Quaternion newRotation = Quaternion.LookRotation(forward, -upDirection);
+        Quaternion newRotation = Quaternion.LookRotation(forward, -up);
 
-        // Apply the final rotation
-        obj.rotation = newRotation;
+        ToRotate.rotation = newRotation;
     }
 
     public void NPoleCompass(Transform p1, Transform Planet)
@@ -1108,13 +1198,18 @@ public class CompassInit : ModBehaviour
 
             ShipAutoRotationSpeed = 10 + (RotationSensibility * 10);
 
-            LazyMarkersResize(MarkersSize,CompassObject.transform.GetChild(0));
-            LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(1));
-            LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(2));
-            LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(3));
-            LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(4));
-            LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(5));
-            LazyMarkersResize(MarkersSize, ManeuvreCompass.transform.GetChild(0));
+            //LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(0));
+            //LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(1));
+            //LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(2));
+            //LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(3));
+            //LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(4));
+            //LazyMarkersResize(MarkersSize, CompassObject.transform.GetChild(5));
+            //LazyMarkersResize(MarkersSize, ManeuvreCompass.transform.GetChild(0));
+
+            foreach (Transform Nav in NavBallMarkers)
+            {
+                LazyMarkersResize(MarkersSize, Nav);
+            }
 
 
             AltimeterGameRule = ShowAltimeter;

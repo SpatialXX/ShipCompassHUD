@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1203672000
+CRC: 2589443582
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9dd1abe1651192c56fed9a410b6eaf64
+    Hash: 36b7e65caf2e1b1f848655e879b85d0d
   TypeTreeHash:
     serializedVersion: 2
     Hash: ed735e7f8de1d0d78fe8328c8b3a718b
@@ -59,16 +59,19 @@ Assets:
 - Assets/HUDMarkers/Retrograde.prefab
 - Assets/HUDMarkers/Compass.prefab
 - Assets/HUDMarkers/RotationConsoleButton.prefab
+- Assets/HUDMarkers/BestVector.prefab
 - Assets/HUDMarkers/Materials/BrightBlue.mat
 - Assets/HUDMarkers/Texture/SmokePuffNormal.tif
 - Assets/HUDMarkers/Models/RadialInModel.asset
 - Assets/HUDMarkers/Normal.prefab
 - Assets/HUDMarkers/Maneuver.prefab
+- Assets/HUDMarkers/Models/QuarterCircle.asset
 - Assets/HUDMarkers/Models/ProgradeModel.asset
 - Assets/HUDMarkers/Models/CompassModel.asset
 - Assets/HUDMarkers/RadialIn.prefab
 - Assets/HUDMarkers/Materials/Ground.mat
 - Assets/HUDMarkers/Models/AntiNormalModel.asset
+- Assets/HUDMarkers/TargetPrograde.prefab
 - Assets/HUDMarkers/Models/HorizonModel.asset
 - Assets/HUDMarkers/Models/CompassCross.asset
 - Assets/HUDMarkers/SmokeEffect.prefab
@@ -88,9 +91,11 @@ Assets:
 - Assets/HUDMarkers/Altimeter.prefab
 - Assets/HUDMarkers/Texture/SmokePuff.png
 - Assets/HUDMarkers/Materials/BlueScreen.mat
+- Assets/HUDMarkers/Materials/Orange.mat
 - Assets/HUDMarkers/Models/RadialOutModel.asset
 - Assets/HUDMarkers/Materials/DarkBlue.mat
 - Assets/HUDMarkers/Models/ManeuverModel.asset
 - Assets/HUDMarkers/Materials/Smoke.mat
+- Assets/HUDMarkers/TargetRetrograde.prefab
 - Assets/HUDMarkers/Models/HorizonMidModel.asset
 Dependencies: []
