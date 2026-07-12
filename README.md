@@ -29,12 +29,16 @@
 
 **Compass :** Display the ship rotation in relation to the target north pole, usefull if you had trouble finding poles while in the ship
 
-**Rate of Closure :** Display how fast your ship is approaching the target
+**(ALT) Rate of Closure :** Display how fast your ship is approaching the target
 
-**Surface Speed :** Display how fast your ship is going, parallel to the surface of the target. Usefull if you ever wondered how fast you were going while flying around a planet.
+**(SPD) Surface Speed :** Display how fast your ship is going, parallel to the surface of the target. Usefull if you ever wondered how fast you were going while flying around a planet.
 
-**True Speed :** Display how fast your ship is going toward the Prograde, this is your total speed.
+**(TRU) True Speed :** Display how fast your ship is going toward the Prograde, this is your total speed.
 
-**Acceleration :** Display how much your ship speed is changing per seconds.
+**(G) Acceleration :** Display how much your ship speed is changing per seconds.
 
-**Orbital Speed :** Display the surface speed you would need to have to orbit the selected target. To enter a circular orbit, your surface speed must match the orbital speed, while the rate of closure must be at 0.
+**(ORB) Orbital Speed :** Display the surface speed you would need to have to orbit the selected target. To enter a circular orbit, your surface speed must match the orbital speed, while the rate of closure must be at 0.
+
+**(AP) Apoapsis :** Display the highest distance the ship will be from the target with it's current orbit.
+
+**(PE) Periapsis :** Display the lowest distance the ship will be from the target with it's current orbit.
